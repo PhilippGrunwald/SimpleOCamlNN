@@ -1,7 +1,6 @@
 
 type t
 
-
 val create : int -> int -> float -> t
 
 val print_matrix : t -> unit
@@ -15,3 +14,5 @@ val get : t -> int -> int -> float
 val map_matrix_inplace : t -> (float -> float) -> unit
 
 val multiply : t -> t -> t
+
+val transpose : t -> t 

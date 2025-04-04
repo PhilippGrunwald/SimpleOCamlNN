@@ -75,10 +75,22 @@ let%expect_test "matmul" =
   Matrix.set_column n 0 [1.; 2.; 3.; -1.];
   Matrix.set_column n 1 [0.; 2.; 0.; 2.];
   Matrix.set_column n 2 [1.; -2.; 0.; 3.];
-  Matrix.print_matrix @@ Matrix.multiply m n;
+  Matrix.print_matrix ( Matrix.multiply m n);
   [%expect {|
-    4.00 -4.00 3.00 12.00
+    4.00 0.00 3.00 12.00
     0.00 4.00 0.00 4.00
+  |}]
+
+
+let%expect_test "transpose" = 
+  let m = Matrix.create 2 3 0. in
+  Matrix.set_column m 0 [1.; 2.; 3.];
+  Matrix.set_column m 1 [-1.; -2.; -3.];
+  Matrix.transpose m |> Matrix.print_matrix;
+  [%expect {|
+    1.00 -1.00
+    2.00 -2.00
+    3.00 -3.00
   |}]
 
   
