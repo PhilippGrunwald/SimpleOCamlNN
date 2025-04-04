@@ -5,11 +5,16 @@ type t = float array array
 let create n m value =
   Array.make_matrix n m value
 
+  
 
 let print_matrix matrix =
   Array.iter (fun row -> 
     Array.iter ( 
-      fun element -> Printf.printf "%.2f " element) row; print_newline()) matrix
+      fun element -> 
+        Printf.printf "%.2f " element
+        ) row; 
+    print_newline()
+  ) matrix
 
 
   
@@ -30,9 +35,44 @@ let get matrix i j =
   matrix.(i).(j)
 
 
+let num_rows matrix = 
+  Array.length matrix
+
+
+let num_cols matrix = 
+  Array.length matrix.(0)
+
+
 let map_matrix_inplace matrix f =
-  for i = 0 to Array.length matrix - 1 do
-    for j = 0 to Array.length matrix.(0) - 1 do
+  for i = 0 to num_rows matrix - 1 do
+    for j = 0 to num_cols matrix - 1 do
       set matrix i j (f @@ get matrix i j)
     done
   done
+
+
+let multiply m n = 
+  (* check that the two matrices can be multiplied *)
+  let rows_m = num_rows m in
+  let rows_n = num_rows n in
+  let cols_m = num_rows m in
+  let cols_n = num_rows n in
+  
+  if cols_m <> rows_n then
+    failwith "Dimension of matrices do not match"
+  else
+    
+  let result = create rows_m cols_n 0.0 in  
+  for i = 0 to rows_m - 1 do
+    for j = 0 to cols_n - 1 do
+      let prod = ref 0. in
+      for k = 0 to cols_m - 1 do
+        prod := !prod +. (get m i k) *. (get n k j)
+      done;
+      set result i j !prod 
+    done
+  done;
+  result
+  
+  
+  

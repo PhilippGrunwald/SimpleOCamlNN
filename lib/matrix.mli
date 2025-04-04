@@ -13,3 +13,5 @@ val set_column : t -> int -> float list -> unit
 val get : t -> int -> int -> float
 
 val map_matrix_inplace : t -> (float -> float) -> unit
+
+val multiply : t -> t -> t
