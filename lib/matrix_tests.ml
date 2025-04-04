@@ -34,3 +34,13 @@ let%expect_test "mapping" =
     6.25 9.00
   |}]
 
+let%expect_test "mapping" = 
+  let matrix = Matrix.create 2 5 0. in
+  Matrix.set_column matrix 0 [1.; 2.; 3.; 4.; 5.];
+  Matrix.set_column matrix 0 [-2.; -3.; -4.; -5.; -6.];
+  Matrix.print_matrix matrix;
+  [%expect {| 
+    1.00 2.00 3.00 4.00 5.00
+    -2.00 -3.00 -4.00 -5.00 -6.00
+  |}]
+

@@ -17,8 +17,13 @@ let set matrix i j value =
   matrix.(i).(j) <- value
 
 
+
 let set_column matrix i column = 
+  if List.length column <> Array.length matrix.(0) then
+    failwith "column length does not match matrix dimension"
+  else
   matrix.(i) <- Array.of_list column
+
 
 
 let get matrix i j =

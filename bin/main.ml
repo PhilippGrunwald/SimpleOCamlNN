@@ -1,5 +1,5 @@
-open SimpleOCamlNN
+(* open SimpleOCamlNN *)
 
 
 let () = 
-  Matrix.test ()
+  print_endline "Hello"
