@@ -1,0 +1,4 @@
+(executable
+ (public_name SimpleOCamlNN)
+ (name main)
+ (libraries SimpleOCamlNN))

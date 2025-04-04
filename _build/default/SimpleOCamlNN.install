@@ -1,0 +1,8 @@
+lib: [
+  "_build/install/default/lib/SimpleOCamlNN/META"
+  "_build/install/default/lib/SimpleOCamlNN/dune-package"
+  "_build/install/default/lib/SimpleOCamlNN/opam"
+]
+bin: [
+  "_build/install/default/bin/SimpleOCamlNN.exe"
+]
