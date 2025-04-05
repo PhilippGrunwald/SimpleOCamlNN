@@ -2,3 +2,7 @@
  (public_name SimpleOCamlNN)
  (name main)
  (libraries SimpleOCamlNN))
+
+(env
+ (dev
+  (flags (:standard -w -27))))

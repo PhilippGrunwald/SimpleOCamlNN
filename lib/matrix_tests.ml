@@ -37,8 +37,8 @@ let%expect_test "mapping" =
 
 let%expect_test "mapping & set_column" = 
   let matrix = Matrix.create 2 5 0. in
-  Matrix.set_column matrix 0 [1.; 2.; 3.; 4.; 5.];
-  Matrix.set_column matrix 1 [-2.; -3.; -4.; -5.; -6.];
+  Matrix.set_row matrix 0 [1.; 2.; 3.; 4.; 5.];
+  Matrix.set_row matrix 1 [-2.; -3.; -4.; -5.; -6.];
   Matrix.print_matrix matrix;
   [%expect {| 
     1.00 2.00 3.00 4.00 5.00
@@ -48,8 +48,8 @@ let%expect_test "mapping & set_column" =
 
 let%expect_test "get" = 
   let matrix = Matrix.create 2 5 0. in
-  Matrix.set_column matrix 0 [1.; 2.; 3.; 4.; 5.];
-  Matrix.set_column matrix 1 [-2.; -3.; -4.; -5.; -6.];
+  Matrix.set_row matrix 0 [1.; 2.; 3.; 4.; 5.];
+  Matrix.set_row matrix 1 [-2.; -3.; -4.; -5.; -6.];
   let value = Matrix.get matrix 1 2 in
   Printf.printf "%.2f" value;
   [%expect {| 
@@ -60,21 +60,46 @@ let%expect_test "get" =
 let%expect_test "dimension error" = 
   let matrix = Matrix.create 2 5 0. in
   (try 
-    Matrix.set_column matrix 0 [1.; 2.; 3.; 4.]
+    Matrix.set_row matrix 0 [1.; 2.; 3.; 4.]
   with Failure msg -> print_endline msg);
   [%expect {| 
     column length does not match matrix dimension      
   |}]
 
 
+let%expect_test "dimension error add" = 
+  let m = Matrix.create 2 5 0. in
+  let n = Matrix.create 3 5 0. in
+  (try 
+   Matrix.print_matrix @@ Matrix.add m n
+  with Failure msg -> print_endline msg);
+  [%expect {| 
+    Missmatch of dimensions in Matrix.add      
+  |}]
+
+let%expect_test "Add" = 
+  let m = Matrix.create 2 3 0. in
+  Matrix.set_row m 0 [1.; 2.; 3.;];
+  Matrix.set_row m 1 [0.; 2.; -1.;];
+  let n = Matrix.create 2 3 0. in
+  Matrix.set_row n 0 [1.; 2.; 3.];
+  Matrix.set_row n 1 [0.; 2.; -2.];
+  Matrix.print_matrix ( Matrix.add m n);
+  [%expect {|
+    2.00 4.00 6.00 
+    0.00 4.00 -3.00   
+  |}]
+
+
+
 let%expect_test "matmul" = 
   let m = Matrix.create 2 3 0. in
-  Matrix.set_column m 0 [1.; 2.; 3.;];
-  Matrix.set_column m 1 [0.; 2.; 0.;];
+  Matrix.set_row m 0 [1.; 2.; 3.;];
+  Matrix.set_row m 1 [0.; 2.; 0.;];
   let n = Matrix.create 3 4 0. in
-  Matrix.set_column n 0 [1.; 2.; 3.; -1.];
-  Matrix.set_column n 1 [0.; 2.; 0.; 2.];
-  Matrix.set_column n 2 [1.; -2.; 0.; 3.];
+  Matrix.set_row n 0 [1.; 2.; 3.; -1.];
+  Matrix.set_row n 1 [0.; 2.; 0.; 2.];
+  Matrix.set_row n 2 [1.; -2.; 0.; 3.];
   Matrix.print_matrix ( Matrix.multiply m n);
   [%expect {|
     4.00 0.00 3.00 12.00
@@ -84,8 +109,8 @@ let%expect_test "matmul" =
 
 let%expect_test "transpose" = 
   let m = Matrix.create 2 3 0. in
-  Matrix.set_column m 0 [1.; 2.; 3.];
-  Matrix.set_column m 1 [-1.; -2.; -3.];
+  Matrix.set_row m 0 [1.; 2.; 3.];
+  Matrix.set_row m 1 [-1.; -2.; -3.];
   Matrix.transpose m |> Matrix.print_matrix;
   [%expect {|
     1.00 -1.00

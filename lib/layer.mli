@@ -7,7 +7,16 @@ type t
 
 val print_layer : t -> unit
 
-val init : inputs:int -> outputs:int -> t
+val init_random : 
+  inputs:int -> 
+  outputs:int -> 
+  activation:Activations.t -> 
+  rand_min:float -> 
+  rand_max:float -> t
+
+
+val feed_foreward : t -> Matrix.t -> Matrix.t
+
 
 
 

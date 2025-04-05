@@ -20,9 +20,20 @@ let set matrix i j value =
   matrix.(i).(j) <- value
 
 
-let set_column matrix i column = 
+let num_rows matrix = 
+  Array.length matrix
+
+
+let num_cols matrix = 
+  Array.length matrix.(0)
+
+
+let set_row matrix i column = 
   if List.length column <> Array.length matrix.(0) then
     failwith "column length does not match matrix dimension"
+  else
+  if i >= num_rows matrix then
+    failwith "The index of row is out of bounds"
   else
   matrix.(i) <- Array.of_list column
 
@@ -30,13 +41,6 @@ let set_column matrix i column =
 let get matrix i j =
   matrix.(i).(j)
 
-
-let num_rows matrix = 
-  Array.length matrix
-
-
-let num_cols matrix = 
-  Array.length matrix.(0)
   
 
 let map_matrix_inplace matrix f =
@@ -51,6 +55,26 @@ let create_random n m lower upper =
   let matrix = create n m 0.0 in
   map_matrix_inplace matrix (fun _ ->  lower +. (Random.float (upper -. lower)));
   matrix
+
+
+let add m n = 
+  let rows_m = num_rows m in
+  let rows_n = num_rows n in
+  let cols_m = num_cols m in
+  let cols_n = num_cols n in
+  
+  if cols_m <> cols_n || rows_m <> rows_n then
+    failwith "Missmatch of dimensions in Matrix.add"
+  else
+
+  let result = create rows_m cols_m 0. in
+  for i = 0 to rows_m - 1 do
+    for j = 0 to cols_m -1 do
+      set result i j @@ (get m i j ) +. (get n i j)
+    done
+  done;
+  result
+
 
 
 let multiply m n = 
