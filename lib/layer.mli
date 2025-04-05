@@ -1,10 +1,14 @@
 
-(* 
+
 
 type t
 
-type activation
+(* type activation *)
 
-val init : int -> int -> activation -> t
- *)
+val print_layer : t -> unit
+
+val init : inputs:int -> outputs:int -> t
+
+
+
 
