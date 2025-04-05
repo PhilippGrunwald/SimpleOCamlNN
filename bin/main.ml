@@ -2,11 +2,17 @@ open SimpleOCamlNN
 
 
 let () = 
-  let m = Matrix.create 2 3 0. in
+  (* let m = Matrix.create 2 3 0. in
   Matrix.set_column m 0 [1.; 2.; 3.;];
   Matrix.set_column m 1 [0.; 2.; 0.;];
   let n = Matrix.create 3 4 0. in
   Matrix.set_column n 0 [1.; 2.; 3.; -1.];
   Matrix.set_column n 1 [0.; 2.; 0.; 2.];
   Matrix.set_column n 2 [1.; -2.; 0.; 3.];
-  Matrix.print_matrix ( Matrix.multiply m n);
+  Matrix.print_matrix ( Matrix.multiply m n); *)
+  
+  let matrix = Matrix.create_random 4 10 (-1.) 1. in
+  Matrix.print_matrix matrix;
+  print_newline ();
+  let matrix = Matrix.create_random 4 10 (-10.) 10. in
+  Matrix.print_matrix matrix;

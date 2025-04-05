@@ -13,6 +13,8 @@ val get : t -> int -> int -> float
 
 val map_matrix_inplace : t -> (float -> float) -> unit
 
+val create_random : int -> int -> float -> float -> t
+
 val multiply : t -> t -> t
 
 val transpose : t -> t 

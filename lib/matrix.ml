@@ -27,7 +27,6 @@ let set_column matrix i column =
   matrix.(i) <- Array.of_list column
 
 
-
 let get matrix i j =
   matrix.(i).(j)
 
@@ -38,7 +37,7 @@ let num_rows matrix =
 
 let num_cols matrix = 
   Array.length matrix.(0)
-
+  
 
 let map_matrix_inplace matrix f =
   for i = 0 to num_rows matrix - 1 do
@@ -46,6 +45,12 @@ let map_matrix_inplace matrix f =
       set matrix i j (f @@ get matrix i j)
     done
   done
+  
+    
+let create_random n m lower upper = 
+  let matrix = create n m 0.0 in
+  map_matrix_inplace matrix (fun _ ->  lower +. (Random.float (upper -. lower)));
+  matrix
 
 
 let multiply m n = 
