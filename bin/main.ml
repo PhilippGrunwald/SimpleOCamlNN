@@ -1,4 +1,4 @@
-open SimpleOCamlNN
+(* open SimpleOCamlNN *)
 
 
 let () = 
@@ -11,8 +11,4 @@ let () =
   Matrix.set_column n 2 [1.; -2.; 0.; 3.];
   Matrix.print_matrix ( Matrix.multiply m n); *)
   
-  let matrix = Matrix.create_random 4 10 (-1.) 1. in
-  Matrix.print_matrix matrix;
-  print_newline ();
-  let matrix = Matrix.create_random 4 10 (-10.) 10. in
-  Matrix.print_matrix matrix;
+  print_endline "Hello"
