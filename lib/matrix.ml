@@ -43,17 +43,20 @@ let get matrix i j =
 
   
 
-let map_matrix_inplace matrix f =
+let map_matrix_inplace f matrix =
   for i = 0 to num_rows matrix - 1 do
     for j = 0 to num_cols matrix - 1 do
       set matrix i j (f @@ get matrix i j)
     done
   done
+
+let map_matrix f matrix = 
+  Array.map (Array.map f) matrix
   
     
 let create_random n m lower upper = 
   let matrix = create n m 0.0 in
-  map_matrix_inplace matrix (fun _ ->  lower +. (Random.float (upper -. lower)));
+  map_matrix_inplace (fun _ ->  lower +. (Random.float (upper -. lower))) matrix;
   matrix
 
 
@@ -94,6 +97,30 @@ let multiply m n =
       let prod = ref 0. in
       for k = 0 to cols_m - 1 do
         prod := !prod +. (get m i k) *. (get n k j);
+      done;
+      set result i j !prod; 
+    done;
+  done;
+  result
+
+
+let multiply_first_transposed m n = 
+  (* multiplication of m.T * n *)
+  let rows_m = num_rows m in
+  let rows_n = num_rows n in
+  let cols_m = num_cols m in
+  let cols_n = num_cols n in
+  
+  if rows_m <> rows_n then
+    failwith "Dimension of matrices do not match"
+  else
+    
+  let result = create cols_m cols_n 0.0 in  
+  for i = 0 to cols_m - 1 do
+    for j = 0 to cols_n - 1 do
+      let prod = ref 0. in
+      for k = 0 to rows_m - 1 do
+        prod := !prod +. (get m k i) *. (get n k j);
       done;
       set result i j !prod; 
     done;

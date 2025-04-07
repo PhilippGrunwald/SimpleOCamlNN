@@ -19,7 +19,15 @@ val num_inputs : t -> int
 
 val num_outputs : t -> int
 
+val get_last_input : t -> Matrix.t
+
+val get_last_output : t -> Matrix.t
+
+val get_gradient : t -> Matrix.t
+
 val feed_foreward : t -> Matrix.t -> Matrix.t
+
+val propagate_backwards : t -> Matrix.t -> Matrix.t
 
 
 

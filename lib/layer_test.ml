@@ -29,3 +29,40 @@ let%expect_test "feed forward const" =
     0.98
     0.98
   |}]
+
+let%expect_test "feed forward last_output" = 
+  let layer = Layer.create_const 
+      ~inputs:3
+      ~outputs:4 
+      ~activation: Activations.Sigmoid
+      ~weight_init: 1.0
+    in
+  let input = Matrix.create 3 1 1.0 in
+  ignore @@ Layer.feed_foreward layer input;
+  layer
+    |> Layer.get_last_output
+    |> Matrix.print_matrix;
+  [%expect {|
+    0.98
+    0.98
+    0.98
+    0.98
+  |}]
+
+let%expect_test "feed forward last_input" = 
+  let layer = Layer.create_const 
+      ~inputs:3
+      ~outputs:4 
+      ~activation: Activations.Sigmoid
+      ~weight_init: 3.0
+    in
+  let input = Matrix.create 3 1 1.0 in
+  ignore @@ Layer.feed_foreward layer input;
+  layer  
+    |> Layer.get_last_input
+    |> Matrix.print_matrix;
+  [%expect {|
+    1.00
+    1.00
+    1.00
+  |}]

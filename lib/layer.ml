@@ -13,6 +13,9 @@ type t =  {
   weights : Matrix.t;
   biases : Matrix.t;
   activation : (float -> float);
+  mutable last_output : Matrix.t;
+  mutable last_input : Matrix.t;
+  mutable gradient : Matrix.t;
 }
 
 
@@ -35,6 +38,9 @@ let create_random ~inputs ~outputs ~activation ~rand_min ~rand_max =
     weights = Matrix.create_random outputs inputs rand_min rand_max;
     biases = Matrix.create_random outputs 1 rand_min rand_max;
     activation = Activations.get_activation_function activation;
+    last_output = Matrix.create outputs 1 0.;
+    last_input = Matrix.create inputs 1 0.;
+    gradient = Matrix.create inputs 1 0.;
   }
 
 let create_const ~inputs ~outputs ~activation ~weight_init = 
@@ -44,6 +50,9 @@ let create_const ~inputs ~outputs ~activation ~weight_init =
     weights = Matrix.create outputs inputs weight_init;
     biases = Matrix.create outputs 1 weight_init;
     activation = Activations.get_activation_function activation;
+    last_output = Matrix.create outputs 1 0.;
+    last_input = Matrix.create inputs 1 0.;
+    gradient = Matrix.create inputs 1 0.;
   }
 
 let num_inputs layer =
@@ -52,10 +61,29 @@ let num_inputs layer =
 let num_outputs layer = 
   layer.outputs
 
+let get_last_output layer = 
+  layer.last_output
+
+let get_last_input layer = 
+  layer.last_input
+
+let get_gradient layer = 
+  layer.gradient
+
 
 let feed_foreward layer inputs = 
-  let output = Matrix.multiply layer.weights inputs in
+  layer.last_input <- inputs;
+  (* let output = Matrix.multiply layer.weights inputs in
   let output_with_biases = Matrix.add output layer.biases in
-  Matrix.map_matrix_inplace output_with_biases layer.activation;
-  output_with_biases
-  
+  Matrix.map_matrix_inplace output_with_biases layer.activation; *)
+  let output = inputs
+    |> Matrix.multiply layer.weights
+    |> Matrix.add layer.biases
+    |> Matrix.map_matrix layer.activation in
+  layer.last_output <- output;
+  output
+
+
+let propagate_backwards layer gradient = 
+  layer.gradient <- gradient;
+  Matrix.multiply_first_transposed layer.weights gradient  
