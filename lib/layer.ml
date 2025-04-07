@@ -28,7 +28,7 @@ let print_layer layer =
   print_newline()
 
 
-let init_random ~inputs ~outputs ~activation ~rand_min ~rand_max = 
+let create_random ~inputs ~outputs ~activation ~rand_min ~rand_max = 
   {
     inputs = inputs;
     outputs = outputs;
@@ -37,7 +37,7 @@ let init_random ~inputs ~outputs ~activation ~rand_min ~rand_max =
     activation = Activations.get_activation_function activation;
   }
 
-let init_const ~inputs ~outputs ~activation ~weight_init = 
+let create_const ~inputs ~outputs ~activation ~weight_init = 
   {
     inputs = inputs;
     outputs = outputs;
@@ -46,6 +46,11 @@ let init_const ~inputs ~outputs ~activation ~weight_init =
     activation = Activations.get_activation_function activation;
   }
 
+let num_inputs layer =
+  layer.inputs
+
+let num_outputs layer = 
+  layer.outputs
 
 
 let feed_foreward layer inputs = 

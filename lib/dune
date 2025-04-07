@@ -1,6 +1,9 @@
 (library
  (name SimpleOCamlNN)
- (modules Matrix Matrix_tests Activations Activations_test Layer Layer_test)
+ (modules Matrix Matrix_tests 
+          Activations Activations_test 
+          Layer Layer_test
+          NN NN_test)
  (inline_tests)
  (preprocess (pps ppx_expect))
  (libraries base))

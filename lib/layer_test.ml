@@ -1,5 +1,5 @@
 let%expect_test "feed forward" = 
-  let layer = Layer.init_random 
+  let layer = Layer.create_random 
       ~inputs:2
       ~outputs:3 
       ~activation: Activations.LeakyReLu
@@ -15,7 +15,7 @@ let%expect_test "feed forward" =
   |}]
 
 let%expect_test "feed forward const" = 
-  let layer = Layer.init_const 
+  let layer = Layer.create_const 
       ~inputs:3
       ~outputs:4 
       ~activation: Activations.Sigmoid
