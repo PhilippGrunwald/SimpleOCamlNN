@@ -32,3 +32,12 @@ let predict nn inputs =
       | [] -> inputs
   in
   aux nn.layers inputs
+
+
+let propagate_backwards nn gradient = 
+  let rec aux layers gradient = 
+    match layers with
+      | head :: rest -> aux rest (Layer.propagate_backwards head gradient)
+      | [] -> gradient
+  in
+  ignore @@ aux (List.rev nn.layers) gradient

@@ -73,9 +73,6 @@ let get_gradient layer =
 
 let feed_foreward layer inputs = 
   layer.last_input <- inputs;
-  (* let output = Matrix.multiply layer.weights inputs in
-  let output_with_biases = Matrix.add output layer.biases in
-  Matrix.map_matrix_inplace output_with_biases layer.activation; *)
   let output = inputs
     |> Matrix.multiply layer.weights
     |> Matrix.add layer.biases
@@ -85,5 +82,6 @@ let feed_foreward layer inputs =
 
 
 let propagate_backwards layer gradient = 
+  Printf.printf "TODOO: Add derivative of activation functions!!";
   layer.gradient <- gradient;
   Matrix.multiply_first_transposed layer.weights gradient  
