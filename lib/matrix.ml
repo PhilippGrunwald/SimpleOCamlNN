@@ -128,6 +128,27 @@ let multiply_first_transposed m n =
   result
 
 
+let multiply_element_vise m n = 
+  (* multiplication of m.T * n *)
+  let rows_m = num_rows m in
+  let rows_n = num_rows n in
+  let cols_m = num_cols m in
+  let cols_n = num_cols n in
+  
+  if rows_m <> rows_n || cols_m <> cols_n then
+    failwith "Dimension of matrices do not match"
+  else
+    
+  let result = create rows_m cols_m 0.0 in  
+  for i = 0 to rows_m - 1 do
+    for j = 0 to cols_m - 1 do
+      (get m i j) *. (get n i j)
+        |> set result i j
+    done
+  done;
+  result
+
+
 let transpose matrix = 
   let rows = num_rows matrix in
   let cols = num_cols matrix in

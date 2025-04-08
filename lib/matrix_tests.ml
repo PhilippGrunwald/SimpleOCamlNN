@@ -135,6 +135,20 @@ let%expect_test "matmul first transposed" =
     3.00 6.00 9.00 -3.00
   |}]
 
+let%expect_test "matmul element vise" = 
+  let m = Matrix.create 2 3 0. in
+  Matrix.set_row m 0 [1.; 2.; 3.;];
+  Matrix.set_row m 1 [0.; 2.; 0.;];
+  let n = Matrix.create 2 3 0. in
+  Matrix.set_row n 0 [0.5; 2.; (-3.)];
+  Matrix.set_row n 1 [0.; (-2.); 0.];
+  Matrix.multiply_element_vise m n
+    |> Matrix.print_matrix;
+  [%expect {|
+    0.50 4.00 -9.00
+    0.00 -4.00 0.00
+  |}]
+
 
 let%expect_test "transpose" = 
   let m = Matrix.create 2 3 0. in

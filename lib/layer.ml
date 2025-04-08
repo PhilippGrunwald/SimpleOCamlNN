@@ -13,9 +13,11 @@ type t =  {
   weights : Matrix.t;
   biases : Matrix.t;
   activation : (float -> float);
+  activation_derivative : (float -> float);
   mutable last_output : Matrix.t;
   mutable last_input : Matrix.t;
   mutable gradient : Matrix.t;
+  mutable last_net_output : Matrix.t;
 }
 
 
@@ -38,7 +40,9 @@ let create_random ~inputs ~outputs ~activation ~rand_min ~rand_max =
     weights = Matrix.create_random outputs inputs rand_min rand_max;
     biases = Matrix.create_random outputs 1 rand_min rand_max;
     activation = Activations.get_activation_function activation;
+    activation_derivative = Activations.get_activation_function_der activation;
     last_output = Matrix.create outputs 1 0.;
+    last_net_output = Matrix.create outputs 1 0.;
     last_input = Matrix.create inputs 1 0.;
     gradient = Matrix.create inputs 1 0.;
   }
@@ -50,7 +54,9 @@ let create_const ~inputs ~outputs ~activation ~weight_init =
     weights = Matrix.create outputs inputs weight_init;
     biases = Matrix.create outputs 1 weight_init;
     activation = Activations.get_activation_function activation;
+    activation_derivative = Activations.get_activation_function_der activation;
     last_output = Matrix.create outputs 1 0.;
+    last_net_output = Matrix.create outputs 1 0.;
     last_input = Matrix.create inputs 1 0.;
     gradient = Matrix.create inputs 1 0.;
   }
@@ -73,15 +79,18 @@ let get_gradient layer =
 
 let feed_foreward layer inputs = 
   layer.last_input <- inputs;
-  let output = inputs
+  let net_output = inputs
     |> Matrix.multiply layer.weights
-    |> Matrix.add layer.biases
-    |> Matrix.map_matrix layer.activation in
-  layer.last_output <- output;
-  output
+    |> Matrix.add layer.biases in
+  layer.last_net_output <- net_output;
+  layer.last_output <- 
+    net_output |> Matrix.map_matrix layer.activation;
+  layer.last_output
 
 
 let propagate_backwards layer gradient = 
-  Printf.printf "TODOO: Add derivative of activation functions!!";
+  (* Printf.printf "TODOO: Add derivative of activation functions!!"; *)
   layer.gradient <- gradient;
-  Matrix.multiply_first_transposed layer.weights gradient  
+  gradient 
+    |> Matrix.multiply_element_vise (Matrix.map_matrix layer.activation_derivative layer.last_net_output)
+    |> Matrix.multiply_first_transposed layer.weights  

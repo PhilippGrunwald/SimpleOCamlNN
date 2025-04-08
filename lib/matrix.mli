@@ -23,4 +23,6 @@ val multiply : t -> t -> t
 
 val multiply_first_transposed : t -> t -> t
 
+val multiply_element_vise : t -> t -> t
+
 val transpose : t -> t 
