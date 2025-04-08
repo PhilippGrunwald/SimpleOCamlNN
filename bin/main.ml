@@ -18,10 +18,9 @@ let parse_mnist filename =
     match splitted_list with
     | h :: tail -> begin
       let label = Matrix.create 10 1 0.0 in
-      Matrix.set label h 1 1.0;
-      let inputs = Matrix.create 1 784 0.0 in
-      Printf.printf "%d\n" (List.length tail);
-      Matrix.set_row inputs 0 (List.map float_of_int tail);
+      Matrix.set label h 0 1.0;
+      let inputs = Matrix.create 784 1 0.0 in
+      Matrix.set_column inputs 0 (List.map float_of_int tail);
       (inputs, label)
     end
     | [] -> failwith "Weird Error"
@@ -49,7 +48,34 @@ let () =
   Matrix.set_column n 1 [0.; 2.; 0.; 2.];
   Matrix.set_column n 2 [1.; -2.; 0.; 3.];
   Matrix.print_matrix ( Matrix.multiply m n); *)
-  
-  Printf.printf "%d\n" (List.length @@ parse_mnist "./data/mnist_train.csv");
-  Printf.printf "%d" (List.length @@ parse_mnist "./data/mnist_test.csv");
+  print_endline "Start loading the data...";
+  let data_train = parse_mnist "./data/mnist_train.csv" in
+  (* let data_test parse_mnist "./data/mnist_test.csv"); *)
+  print_endline "Data loaded!";
+  print_endline "Creating NN...";
+
+  let nn = NN.create [
+    Layer.create_random
+      ~inputs:784
+      ~outputs:200 
+      ~activation:Activations.Sigmoid 
+      ~rand_min:(-1.0)
+      ~rand_max:1.0;
+    Layer.create_random
+      ~inputs:200
+      ~outputs:80  
+      ~activation:Activations.Sigmoid 
+      ~rand_min:(-1.0)
+      ~rand_max:1.0;
+    Layer.create_random
+      ~inputs:80
+      ~outputs:10 
+      ~activation:Activations.Sigmoid 
+      ~rand_min:(-1.0)
+      ~rand_max:1.0;
+      ] 0.001 in
+
+  print_endline "NN Created!";
+  print_endline "Start trianing...";
+  NN.train nn data_train 4;
 

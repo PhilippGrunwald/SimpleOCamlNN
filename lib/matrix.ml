@@ -3,43 +3,60 @@
 type t = float array array 
 
 let create n m value =
-  Array.make_matrix n m value
-
-
-let print_matrix matrix =
-  Array.iter (fun row -> 
-    Array.iter ( 
-      fun element -> 
-        Printf.printf "%.2f " element
-        ) row; 
-    print_newline()
-  ) matrix
-
-  
-let set matrix i j value =
-  matrix.(i).(j) <- value
-
+  Array.make_matrix m n value
 
 let num_rows matrix = 
-  Array.length matrix
-
-
+    Array.length matrix.(0)
+  
+  
 let num_cols matrix = 
-  Array.length matrix.(0)
+    Array.length matrix
 
 
-let set_row matrix i column = 
-  if List.length column <> Array.length matrix.(0) then
+let set matrix i j value =
+  matrix.(j).(i) <- value
+
+
+
+
+let set_row matrix i row = 
+  if List.length row <> num_cols matrix then
     failwith "column length does not match matrix dimension"
   else
-  if i >= num_rows matrix then
+  if i >= num_rows matrix || i < 0 then
     failwith "The index of row is out of bounds"
+  else
+  let row_as_array = Array.of_list row in
+  for j = 0 to (num_cols matrix) - 1 do
+    set matrix i j row_as_array.(j)
+  done
+
+let set_column matrix i column = 
+  if List.length column <> num_rows matrix then
+    failwith "row length does not match matrix dimension"
+  else
+  if i >= num_cols matrix || i < 0 then
+    failwith "The index of column is out of bounds"
   else
   matrix.(i) <- Array.of_list column
 
 
 let get matrix i j =
-  matrix.(i).(j)
+  matrix.(j).(i)
+    
+
+
+let print_matrix matrix =
+  let rows = num_rows matrix in
+  let cols = num_cols matrix in
+  for i = 0 to rows - 1 do
+    for j = 0 to cols - 1 do
+      Printf.printf "%.2f " (get matrix i j)
+    done;
+    print_newline()
+  done
+
+  
 
   
 

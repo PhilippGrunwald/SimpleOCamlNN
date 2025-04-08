@@ -45,7 +45,7 @@ let propagate_backwards nn gradient =
   ignore @@ aux (List.rev nn.layers) gradient
 
 
-let train nn inputs labels = 
+let train_one nn inputs labels = 
   let outputs = predict  nn inputs in 
   let gradient =  Matrix.add outputs (Matrix.map_matrix (fun x -> -.x) labels) in
   propagate_backwards nn gradient;
@@ -54,5 +54,24 @@ let train nn inputs labels =
     | [] -> ()
   in
   aux nn.layers
+
+
+let rec train nn training_data epochs =
+  Printf.printf "Epochs to go: %d\n" epochs;
+  flush stdout;
+  let rec aux i = function
+    | (input, label) :: tail -> begin
+      train_one nn input label; 
+      if i mod 100 = 0 then
+        Printf.printf "Trained in epoch: %d\n" i;
+        flush stdout;
+      aux (i + 1) tail
+    end
+    | [] -> ()
+  in
+  if epochs >= 1 then
+    aux 0 training_data;
+    train nn training_data (epochs - 1)
+
 
 

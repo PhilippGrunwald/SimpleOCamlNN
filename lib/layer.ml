@@ -102,7 +102,8 @@ let adjust_weights_sgd layer lr=
   for i = 0 to layer.outputs - 1 do
     for j = 0 to layer.inputs - 1 do
       Matrix.set layer.weights i j ((Matrix.get layer.weights i j) -. 
-                            lr *. (Matrix.get der_net_output i 1) *. (Matrix.get layer.last_input j 1)
-                            *. (Matrix.get layer.gradient i 1))
+                            lr *. (Matrix.get der_net_output i 0) *. (Matrix.get layer.last_input j 0)
+                            *. (Matrix.get layer.gradient i 0))
     done
   done
+  (* TODOO: Adjust Biases! *)
