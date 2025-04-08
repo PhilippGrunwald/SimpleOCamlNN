@@ -11,15 +11,13 @@ let%expect_test "nn creation" =
       ~outputs:1
       ~activation:Activations.Sigmoid 
       ~weight_init:1.
-  ] in
+  ] 0.001 in
   Matrix.create 3 1 1.0
     |> NN.predict nn
     |> Matrix.print_matrix;
   [%expect {|
     1.00
   |}] 
-
-
 
 
 let%expect_test "nn ff" = 
@@ -34,13 +32,11 @@ let%expect_test "nn ff" =
       ~outputs:1
       ~activation:Activations.Sigmoid 
       ~weight_init:0.1
-  ] in
+  ] 0.001 in
   Matrix.print_matrix @@ NN.predict nn (Matrix.create 3 1 0.1);
   [%expect {|
     0.54
   |}]
-
-
 
 
 let%expect_test "nn creation" = 
@@ -55,7 +51,7 @@ let%expect_test "nn creation" =
       ~outputs:1
       ~activation:Activations.Sigmoid
       ~weight_init:0.1
-  ] in
+  ] 0.001 in
   ignore @@ NN.predict nn (Matrix.create 3 1 0.1);
   Matrix.create 1 1 1.0
     |> NN.propagate_backwards nn;

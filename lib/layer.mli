@@ -29,7 +29,7 @@ val feed_foreward : t -> Matrix.t -> Matrix.t
 
 val propagate_backwards : t -> Matrix.t -> Matrix.t
 
-
+val adjust_weights_sgd : t -> float -> unit
 
 
 

@@ -94,3 +94,15 @@ let propagate_backwards layer gradient =
   gradient 
     |> Matrix.multiply_element_vise (Matrix.map_matrix layer.activation_derivative layer.last_net_output)
     |> Matrix.multiply_first_transposed layer.weights  
+
+
+
+let adjust_weights_sgd layer lr= 
+  let der_net_output = Matrix.map_matrix layer.activation_derivative layer.last_net_output in
+  for i = 0 to layer.outputs - 1 do
+    for j = 0 to layer.inputs - 1 do
+      Matrix.set layer.weights i j ((Matrix.get layer.weights i j) -. 
+                            lr *. (Matrix.get der_net_output i 1) *. (Matrix.get layer.last_input j 1)
+                            *. (Matrix.get layer.gradient i 1))
+    done
+  done
