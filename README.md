@@ -6,7 +6,37 @@ _SimpleOCamlNN_ will be a **minimalistic** (admittedly not really efficient) imp
 
 The project will be so lightweight that you can simply copy the code into your own project and it will run.
 
+## Example: Simple Neural Network with ~95% Accuracy after 4 Epochs
+
+```ocaml
+open SimpleOCamlNN
+
+let nn = NN.create [
+    Layer.create_random
+      ~inputs:784
+      ~outputs:200
+      ~activation:Activations.Sigmoid
+      ~rand_min:(-1.0)
+      ~rand_max:1.0;
+    Layer.create_random
+      ~inputs:200
+      ~outputs:40  
+      ~activation:Activations.Sigmoid
+      ~rand_min:(-1.0)
+      ~rand_max:1.0;
+    Layer.create_random
+      ~inputs:40
+      ~outputs:10  
+      ~activation:Activations.Sigmoid
+      ~rand_min:(-1.0)
+      ~rand_max:1.0;
+      ] 0.01 in
+
+NN.train nn data_train 4;
+```
+
 ## References
 1. Christopher M. Bishop, Hugh Bishop: *Deep Learning - Foundations and Concepts* [Springer Link](https://link.springer.com/book/10.1007/978-3-031-45468-4) 
 2. Diederik P. Kingma, Jimmy Ba: *Adam: A Method for Stochastic Optimization* [Arxiv](https://arxiv.org/abs/1412.6980)
+
 
