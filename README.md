@@ -6,7 +6,7 @@ _SimpleOCamlNN_ will be a **minimalistic** (admittedly not really efficient) imp
 
 The project will be so lightweight that you can simply copy the code into your own project and it will run.
 
-## Example: Simple Neural Network with ~95% Accuracy after 4 Epochs
+## Example: Simple Neural Network for the MNIST data set with ~95% Accuracy after 4 Epochs
 
 ```ocaml
 open SimpleOCamlNN
