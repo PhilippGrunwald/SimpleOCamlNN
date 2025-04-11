@@ -3,6 +3,10 @@ type t
 
 val create : int -> int -> float -> t
 
+val num_rows : t -> int
+
+val num_cols : t -> int
+
 val print_matrix : t -> unit
 
 val set : t -> int -> int -> float -> unit

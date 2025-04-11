@@ -43,7 +43,6 @@ let set_column matrix i column =
 
 let get matrix i j =
   matrix.(j).(i)
-    
 
 
 let print_matrix matrix =

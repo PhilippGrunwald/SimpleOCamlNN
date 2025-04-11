@@ -20,7 +20,7 @@ let parse_mnist filename =
       let label = Matrix.create 10 1 0.0 in
       Matrix.set label h 0 1.0;
       let inputs = Matrix.create 784 1 0.0 in
-      Matrix.set_column inputs 0 (List.map float_of_int tail);
+      Matrix.set_column inputs 0 (List.map (fun x -> (float_of_int x) /. 255.) tail);
       (inputs, label)
     end
     | [] -> failwith "Weird Error"
@@ -38,6 +38,36 @@ let parse_mnist filename =
   aux []
 
 
+let get_index_of_max a = 
+  if Matrix.num_rows a = 0 then
+    failwith "Empty Array has no max element"
+  else
+  let max_ind = ref 0 in
+  let max = ref @@ Matrix.get a 0 0 in
+  for i = 1 to Matrix.num_rows a - 1 do
+    if Matrix.get a i 0 > !max then begin
+      max_ind := i;
+      max := Matrix.get a i 0;
+    end
+  done;
+  !max_ind
+
+let benchmark nn data_test = 
+  let rec aux n_correct = function
+  | (inputs, label) :: tail -> begin
+    let prediction_encoded = NN.predict nn inputs in
+    let prediction = get_index_of_max prediction_encoded in
+    let label_decoded = get_index_of_max label in
+    if label_decoded = prediction then 
+      aux (n_correct + 1) tail
+    else
+      aux n_correct tail
+  end
+  | [] -> n_correct
+  in
+  (float_of_int @@ aux 0 data_test) /. (float_of_int @@ List.length data_test)
+
+
 
 let () = 
   (* let m = Matrix.create 2 3 0. in
@@ -50,6 +80,10 @@ let () =
   Matrix.print_matrix ( Matrix.multiply m n); *)
   print_endline "Start loading the data...";
   let data_train = parse_mnist "./data/mnist_train.csv" in
+  let data_test = parse_mnist "./data/mnist_test.csv" in
+
+  
+
   (* let data_test parse_mnist "./data/mnist_test.csv"); *)
   print_endline "Data loaded!";
   print_endline "Creating NN...";
@@ -57,25 +91,35 @@ let () =
   let nn = NN.create [
     Layer.create_random
       ~inputs:784
-      ~outputs:200 
-      ~activation:Activations.Sigmoid 
+      ~outputs:10
+      ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
     Layer.create_random
-      ~inputs:200
-      ~outputs:80  
-      ~activation:Activations.Sigmoid 
+      ~inputs:10
+      ~outputs:10  
+      ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
     Layer.create_random
-      ~inputs:80
-      ~outputs:10 
-      ~activation:Activations.Sigmoid 
+      ~inputs:10
+      ~outputs:10  
+      ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
-      ] 0.001 in
+      ] 0.01 in
 
   print_endline "NN Created!";
   print_endline "Start trianing...";
-  NN.train nn data_train 4;
+  
+
+  let accuracy = benchmark nn data_test in
+  Printf.printf "\n\n\n--------- Acc --------\nAcc: %.4f\n\n\n" accuracy;
+  flush stdout;
+  for i = 0 to 3 do
+    NN.train nn data_train 1;
+    let accuracy = benchmark nn data_test in
+    Printf.printf "\n\n\n--------- Acc %d --------\nAcc: %.4f\n\n\n" i accuracy;
+    flush stdout;
+  done
 

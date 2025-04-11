@@ -62,16 +62,16 @@ let rec train nn training_data epochs =
   let rec aux i = function
     | (input, label) :: tail -> begin
       train_one nn input label; 
-      if i mod 100 = 0 then
+      if i mod 1000 = 0 then
         Printf.printf "Trained in epoch: %d\n" i;
         flush stdout;
       aux (i + 1) tail
     end
     | [] -> ()
   in
-  if epochs >= 1 then
+  if epochs >= 1 then begin
     aux 0 training_data;
     train nn training_data (epochs - 1)
-
+  end
 
 
