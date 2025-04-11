@@ -7,5 +7,6 @@ _SimpleOCamlNN_ will be a **minimalistic** (admittedly not really efficient) imp
 The project will be so lightweight that you can simply copy the code into your own project and it will run.
 
 ## References
-1. Diederik P. Kingma, Jimmy Ba: *Adam: A Method for Stochastic Optimization* [Arxiv](https://arxiv.org/abs/1412.6980)
+1. Christopher M. Bishop, Hugh Bishop: *Deep Learning - Foundations and Concepts* [Springer Link](https://link.springer.com/book/10.1007/978-3-031-45468-4) 
+2. Diederik P. Kingma, Jimmy Ba: *Adam: A Method for Stochastic Optimization* [Arxiv](https://arxiv.org/abs/1412.6980)
 

@@ -91,18 +91,18 @@ let () =
   let nn = NN.create [
     Layer.create_random
       ~inputs:784
-      ~outputs:10
+      ~outputs:200
       ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
     Layer.create_random
-      ~inputs:10
-      ~outputs:10  
+      ~inputs:200
+      ~outputs:40  
       ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
     Layer.create_random
-      ~inputs:10
+      ~inputs:40
       ~outputs:10  
       ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
