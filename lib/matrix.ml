@@ -1,20 +1,28 @@
 
 
-type t = float array array 
+type t = {
+  rows: int;
+  cols: int;
+  values: float array
+} 
 
 let create n m value =
-  Array.make_matrix m n value
+  {
+    rows = n;
+    cols = m;
+    values = Array.make (n * m) value
+  }
 
 let num_rows matrix = 
-    Array.length matrix.(0)
+    matrix.rows
   
   
 let num_cols matrix = 
-    Array.length matrix
+    matrix.cols
 
 
 let set matrix i j value =
-  matrix.(j).(i) <- value
+  matrix.values.(i * (num_cols matrix) + j) <- value
 
 
 
@@ -31,18 +39,21 @@ let set_row matrix i row =
     set matrix i j row_as_array.(j)
   done
 
-let set_column matrix i column = 
+let set_column matrix j column = 
   if List.length column <> num_rows matrix then
     failwith "row length does not match matrix dimension"
   else
-  if i >= num_cols matrix || i < 0 then
+  if j >= num_cols matrix || j < 0 then
     failwith "The index of column is out of bounds"
   else
-  matrix.(i) <- Array.of_list column
+  let column_list = Array.of_list column in
+  for i = 0 to (num_rows matrix) - 1 do
+    set matrix i j column_list.(i)
+  done
 
 
 let get matrix i j =
-  matrix.(j).(i)
+  matrix.values.(i * (num_cols matrix) + j)
 
 
 let print_matrix matrix =
@@ -67,7 +78,13 @@ let map_matrix_inplace f matrix =
   done
 
 let map_matrix f matrix = 
-  Array.map (Array.map f) matrix
+  let result = create (num_rows matrix) (num_cols matrix) 0.0 in
+  for i = 0 to num_rows matrix - 1 do
+    for j = 0 to num_cols matrix - 1 do
+      set result i j (f @@ get matrix i j)
+    done
+  done;
+  result
   
     
 let create_random n m lower upper = 

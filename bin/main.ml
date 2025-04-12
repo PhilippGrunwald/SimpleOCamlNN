@@ -1,5 +1,6 @@
 open SimpleOCamlNN
 
+(* Last Timing: 61.402189 *)
 
 let parse_mnist filename = 
   let split_csv_line line =
@@ -88,26 +89,33 @@ let () =
   print_endline "Data loaded!";
   print_endline "Creating NN...";
 
+  let start = Unix.gettimeofday () in
   let nn = NN.create [
     Layer.create_random
       ~inputs:784
-      ~outputs:200
+      ~outputs: 200
       ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
     Layer.create_random
       ~inputs:200
-      ~outputs:40  
+      ~outputs:80  
       ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
     Layer.create_random
-      ~inputs:40
+      ~inputs:80
+      ~outputs:20  
+      ~activation:Activations.Sigmoid
+      ~rand_min:(-1.0)
+      ~rand_max:1.0;
+    Layer.create_random
+      ~inputs:20
       ~outputs:10  
       ~activation:Activations.Sigmoid
       ~rand_min:(-1.0)
       ~rand_max:1.0;
-      ] 0.01 in
+      ] 0.005 in
 
   print_endline "NN Created!";
   print_endline "Start trianing...";
@@ -116,10 +124,12 @@ let () =
   let accuracy = benchmark nn data_test in
   Printf.printf "\n\n\n--------- Acc --------\nAcc: %.4f\n\n\n" accuracy;
   flush stdout;
-  for i = 0 to 3 do
+  for i = 0 to 20 do
     NN.train nn data_train 1;
     let accuracy = benchmark nn data_test in
     Printf.printf "\n\n\n--------- Acc %d --------\nAcc: %.4f\n\n\n" i accuracy;
     flush stdout;
-  done
+  done;
+  let stop = Unix.gettimeofday () in
+  Printf.printf "Execution time: %f seconds\n" (stop -. start);
 

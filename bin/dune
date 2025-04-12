@@ -1,7 +1,7 @@
 (executable
  (public_name SimpleOCamlNN)
  (name main)
- (libraries SimpleOCamlNN))
+ (libraries SimpleOCamlNN unix))
 
 (env
  (dev
